@@ -15,6 +15,16 @@ const io = new Server(server, {
   },
 });
 
+io.on("connection", (socket) => {
+  var clientIp = socket.request.socket.remoteAddress;
+  console.log(`User Connected: ${socket.id} from ${clientIp}`);
+
+  socket.on("send_message", (data) => {
+    socket.broadcast.emit("receive_message", data);
+    console.log(data);
+  });
+});
+
 server.listen(3001, () => {
   console.log("Server is running");
 });
